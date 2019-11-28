@@ -32,7 +32,7 @@ class FuncModel {
     async index(login, senha) {
 
         const sql = `
-            SELECT idConta FROM tblContas WHERE login= '${login}' AND senha='${senha}';
+            SELECT idConta FROM tblConta WHERE login= '${login}' AND senha='${senha}';
         `;
 
         let response = await query(connection, sql);
@@ -54,14 +54,7 @@ class FuncModel {
 
     async maquinas() {
         const sql = `
-            SELECT
-                M.idMaquina AS id,
-                M.apelidoMaquina AS nome,
-                F.nomeFuncionario AS funcionario
-            FROM tblMaquina M
-            LEFT JOIN
-                tblFuncionario F
-                ON F.fkMaquina = M.idMaquina
+            SHOW COLLUMNS FROM tblNotificacao
         `;
 
         const response = await query(connection, sql);

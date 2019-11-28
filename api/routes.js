@@ -83,6 +83,9 @@ routes.delete('/funcionarios', async (req, res) => {
 
 
 // Dashboard
+
+const DashController = require('./controllers/DashController');
+
 routes.post('/dashboard', async(req, res) => {
     const response = await DashController.getData(req, res);
     return response;

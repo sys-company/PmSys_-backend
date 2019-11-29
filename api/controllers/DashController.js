@@ -6,7 +6,7 @@ const getData = async (req, res) => {
 
     model = new DashModel();
 
-    const dashData = await model.select();
+    const dashData = await model.select(periodo);
     const dashHard = await model.selectHard(periodo);
     const dashFim = {dashData,dashHard}
     //if(session.length > 0) {

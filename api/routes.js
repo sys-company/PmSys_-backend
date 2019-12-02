@@ -81,7 +81,7 @@ routes.put('/funcionarios', async (req, res) => {
     const response = await FuncController.updateFunc(req, res);
     return response;
 });
-
+// Deletar Funcionários
 routes.delete('/funcionarios', async (req, res) => {
     const response = await FuncController.deleteFunc(req, res);
     return response;
@@ -100,6 +100,15 @@ routes.get('/dashboard', async(req, res) => {
 
 routes.get('/notifications', async(req, res) => {
     const response = await FuncController.getNotifications(req, res);
+    return response;
+});
+
+// rota notificações home
+
+const HomeController = require('./controllers/HomeController');
+
+routes.post('/notifySquads', async(req, res) => {
+    const response = await HomeController.getNotify(req, res);
     return response;
 });
 

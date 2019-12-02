@@ -84,6 +84,20 @@ class DashModel {
 
 	}
 
+	async selectOnline(periodo) {
+		const sql = `
+		SELECT
+		 *
+		 FROM vmOnline WHERE PERIODO LIKE '%${periodo}%';
+		`;
+		let dashOnline = await query(connection, sql);
+		dashOnline = dashOnline.recordsets[0];
+		
+
+		return dashOnline;
+
+	}
+
 
 }
 

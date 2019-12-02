@@ -32,9 +32,13 @@ class SquadModel {
                 Descricao descricao,
                 objetivo objetivo,
                 f.idFuncionario idFuncionario,
-                f.nomeFuncionario nomeFuncionario
+                f.nomeFuncionario nomeFuncionario,
+                f.sexo sexoFuncionario,
+                c.nomeCargo as cargo
             FROM tblSquad s
             INNER JOIN tblFuncionario f ON s.idSquad = f.fkSquad
+            INNER JOIN tblCargo c
+            ON f.fkCargo = c.idCargo
             WHERE s.fkConta = ${id} AND s.idSquad = ${idSquad}
             
         `;

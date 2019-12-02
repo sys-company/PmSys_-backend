@@ -75,8 +75,8 @@ const updateSquad = async ( req, res ) => {
     if(id && apelido && area && descricao && objetivo){
 
         await model.update(apelido, area, descricao, objetivo, id);
-        if(listFuncAdd.length) await model.updateFuncionarioSquad(listFuncAdd, id);
-        if(listFuncRemove.length) await model.removeFuncionarioSquad(listFuncRemove); 
+        if(listFuncAdd && listFuncAdd.length) await model.updateFuncionarioSquad(listFuncAdd, id);
+        if(listFuncRemove && listFuncRemove.length) await model.removeFuncionarioSquad(listFuncRemove); 
         return res.status(201).end();
 
     } else {

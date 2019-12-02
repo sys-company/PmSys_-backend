@@ -81,7 +81,7 @@ routes.put('/funcionarios', async (req, res) => {
     const response = await FuncController.updateFunc(req, res);
     return response;
 });
-
+// Deletar Funcionários
 routes.delete('/funcionarios', async (req, res) => {
     const response = await FuncController.deleteFunc(req, res);
     return response;

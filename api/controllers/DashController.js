@@ -1,21 +1,18 @@
 const DashModel = require('../models/DashModel');
 
 const getData = async (req, res) => {
-    
-    const { periodo } = req.body;
+
+    const { periodo } = req.query || { periodo: 'DIARIO' };
 
     model = new DashModel();
 
-    const dashData = await model.select(periodo);
-    const dashHard = await model.selectHard(periodo);
-    const dashFim = {dashData,dashHard}
-    //if(session.length > 0) {
-         return res.status(200).json(dashFim);
-    // }else {
-    //     return res.status(404).end();
-    // }
+    const notificacoes = await model.notificacoes(periodo);
+    const programas = await model.select(periodo);
+    const hardware = await model.selectHard(periodo);
+    const response = { notificacoes, programas, hardware };
+    return res.status(200).json(response);
 
-} 
+}
 module.exports = {
     getData,
 };

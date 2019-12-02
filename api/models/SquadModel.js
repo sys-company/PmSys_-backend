@@ -121,6 +121,19 @@ class SquadModel {
         await query(connection, sql);
     }
 
+    async deleteSquad(id){
+
+        const sql = `
+        DELETE FROM
+            tblSquad
+        WHERE
+            idSquad = ${id}
+    
+        `;
+    
+            await query(connection, sql);
+        }
+
 }
 
 module.exports = SquadModel;

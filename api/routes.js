@@ -32,6 +32,12 @@ routes.put('/squad', async (req, res) => {
     return response;
 });
 
+// Deletar Squad
+routes.delete('/squad', async (req, res) => {
+    const response = await SquadController.deleteSquad(req, res);
+    return response;
+});
+
 // Funcionários
 
 const FuncController = require('./controllers/FuncController');
@@ -75,7 +81,7 @@ routes.put('/funcionarios', async (req, res) => {
     const response = await FuncController.updateFunc(req, res);
     return response;
 });
-
+// Deletar Funcionários
 routes.delete('/funcionarios', async (req, res) => {
     const response = await FuncController.deleteFunc(req, res);
     return response;

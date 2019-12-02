@@ -86,9 +86,24 @@ const updateSquad = async ( req, res ) => {
     }
 }
 
+const deleteSquad = async ( req, res ) => {
+    const { id } = req.query;
+    model = new SquadModel();
+
+    if(id){
+        await model.deleteSquad(id);
+        return res.status(204).end();
+
+    } else {
+
+        return res.status().end();
+    }
+}
+
 module.exports = {
     list,
     getSquad,
     createSquad,
     updateSquad,
+    deleteSquad,
 };

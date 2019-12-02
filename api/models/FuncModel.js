@@ -13,6 +13,7 @@ class FuncModel {
                 F.identificador as tag,
                 F.nomeFuncionario as nome,
                 F.sexo as sexo,
+                F.inicioExpediente as entrada,
                 C.nomeCargo as cargo,
                 S.apelidoSquad as squad,
                 F.fkMaquina as idMaquina,
@@ -54,7 +55,14 @@ class FuncModel {
 
     async maquinas() {
         const sql = `
-            SHOW COLLUMNS FROM tblNotificacao
+            SELECT
+                M.idMaquina AS id,	
+                M.apelidoMaquina AS nome,	
+                F.nomeFuncionario AS funcionario	
+            FROM tblMaquina M	
+            LEFT JOIN	
+                tblFuncionario F	
+                ON F.fkMaquina = M.idMaquina
         `;
 
         const response = await query(connection, sql);

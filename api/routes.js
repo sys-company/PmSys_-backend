@@ -32,7 +32,7 @@ routes.put('/squad', async (req, res) => {
     return response;
 });
 
-// Deletar Squad
+// Exclusão de squad
 routes.delete('/squad', async (req, res) => {
     const response = await SquadController.deleteSquad(req, res);
     return response;
@@ -89,7 +89,10 @@ routes.delete('/funcionarios', async (req, res) => {
 
 
 // Dashboard
-routes.post('/dashboard', async(req, res) => {
+
+const DashController = require('./controllers/DashController');
+
+routes.get('/dashboard', async(req, res) => {
     const response = await DashController.getData(req, res);
     return response;
 });

@@ -87,16 +87,20 @@ const updateSquad = async ( req, res ) => {
 }
 
 const deleteSquad = async ( req, res ) => {
-    const { id } = req.query;
-    model = new SquadModel();
 
-    if(id){
-        await model.deleteSquad(id);
+    const { id } = req.headers;
+    const { id: idSquad } = req.body;
+    const model = new SquadModel();
+
+    if(id && idSquad){
+
+        await model.delete(idSquad, id);
         return res.status(204).end();
 
     } else {
 
-        return res.status().end();
+        return res.status(400).end();
+    
     }
 }
 

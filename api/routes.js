@@ -103,4 +103,13 @@ routes.get('/notifications', async(req, res) => {
     return response;
 });
 
+// rota notificações home
+
+const HomeController = require('./controllers/HomeController');
+
+routes.post('/notifySquads', async(req, res) => {
+    const response = await HomeController.getNotify(req, res);
+    return response;
+});
+
 module.exports = routes;

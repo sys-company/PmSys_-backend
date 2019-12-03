@@ -8,7 +8,8 @@ class FuncModel {
     async select() {
 
         const sql = `
-            SELECT
+        SELECT * FROM(
+			SELECT
                 F.idFuncionario as id,
                 F.identificador as tag,
                 F.nomeFuncionario as nome,
@@ -17,12 +18,18 @@ class FuncModel {
                 C.nomeCargo as cargo,
                 S.apelidoSquad as squad,
                 F.fkMaquina as idMaquina,
-                F.fkSquad as idSquad
+                F.fkSquad as idSquad,
+				CASE WHEN sf.horaSaiu is null then 1 else 0 end as [Online],
+				DENSE_RANK() OVER(partition by F.idFuncionario, F.nomeFuncionario, F.identificador, F.sexo, F.inicioExpediente, C.nomeCargo, S.apelidoSquad, S.apelidoSquad, F.fkMaquina, F.fkSquad order by sf.idStatusFuncionario desc) as [rank]
             FROM tblFuncionario F
             LEFT JOIN tblCargo C
                 ON F.fkCargo = C.idCargo
             LEFT JOIN tblSquad S
                 ON F.fkSquad = S.idSquad
+			LEFT JOIN tblStatusFuncionario sf 
+				ON F.idFuncionario = sf.fkFuncionario
+		) AS J
+		WHERE J.[rank] = 1
         `;
 
         const listaFuncionarios = await query(connection, sql);

@@ -40,7 +40,6 @@ class SquadModel {
             INNER JOIN tblCargo c
             ON f.fkCargo = c.idCargo
             WHERE s.fkConta = ${id} AND s.idSquad = ${idSquad}
-            
         `;
 
         let squad = await query(connection, sql);
@@ -99,7 +98,7 @@ class SquadModel {
 
     async addFuncionarioSquad(listFunc) {
         const sql = `
-        UPDATE 
+        UPDATE
         tblFuncionario
         SET
         fkSquad = @@identity
@@ -112,7 +111,7 @@ class SquadModel {
 
     async updateFuncionarioSquad(listFunc, fkSquad) {
         const sql = `
-        UPDATE 
+        UPDATE
                 tblFuncionario
                 SET
                 fkSquad = ${fkSquad}
@@ -125,7 +124,7 @@ class SquadModel {
 
     async removeFuncionarioSquad(listFunc) {
         const sql = `
-            UPDATE 
+            UPDATE
                 tblFuncionario
             SET
              fkSquad = null
@@ -143,9 +142,9 @@ class SquadModel {
             tblSquad
         WHERE
             idSquad = ${id}
-    
+
         `;
-    
+
             await query(connection, sql);
         }
 
@@ -156,7 +155,7 @@ class SquadModel {
         FROM (
 		SELECT
 		   ROUND((R.totalRamUsado / R.totalRam)* 100, 2) AS PERCENT_RAM
-		   FROM tblInfoRAM AS R 
+		   FROM tblInfoRAM AS R
 		  INNER JOIN tblMaquina AS M ON (R.fkMaquina = M.idMaquina)
 		 INNER JOIN tblFuncionario AS F ON (M.idMaquina = F.fkMaquina)
 		INNER JOIN tblSquad AS S ON (F.fkSquad = S.idSquad) WHERE S.idSquad = ${id})RAMZ;

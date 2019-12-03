@@ -31,8 +31,7 @@ const getSquad = async (req, res) => {
     if(id && idSquad) {
     
         let dadosSquad = await model.index(id, idSquad);
-
-        const response = {"nome": dadosSquad[0].nome, "area": dadosSquad[0].area, "descricao": dadosSquad[0].descricao, "objetivo": dadosSquad[0].objetivo, "funcionarios": dadosSquad.map(dados => { return {"idFuncionario": dados.idFuncionario, "nomeFuncionario": dados.nomeFuncionario} })};
+        const response = {"nome": dadosSquad[0].nome, "area": dadosSquad[0].area, "descricao": dadosSquad[0].descricao, "objetivo": dadosSquad[0].objetivo, "funcionarios": dadosSquad.map(dados => { return {"idFuncionario": dados.idFuncionario, "nomeFuncionario": dados.nomeFuncionario, "sexoFuncionario": dados.sexoFuncionario, "cargo": dados.cargo} })};
 
         return res.status(200).json(response);
     
@@ -75,8 +74,8 @@ const updateSquad = async ( req, res ) => {
     if(id && apelido && area && descricao && objetivo){
 
         await model.update(apelido, area, descricao, objetivo, id);
-        if(listFuncAdd.length) await model.updateFuncionarioSquad(listFuncAdd, id);
-        if(listFuncRemove.length) await model.removeFuncionarioSquad(listFuncRemove); 
+        if(listFuncAdd && listFuncAdd.length) await model.updateFuncionarioSquad(listFuncAdd, id);
+        if(listFuncRemove && listFuncRemove.length) await model.removeFuncionarioSquad(listFuncRemove); 
         return res.status(201).end();
 
     } else {
@@ -102,6 +101,16 @@ const deleteSquad = async ( req, res ) => {
         return res.status(400).end();
     
     }
+
+
+}
+
+const getDashSquad = async (req, res) => {
+    const { id } = req.query;
+    model = new SquadModel();
+    const dashData = await model.selectData(id);
+    const response = {dashData};
+    return res.status(200).json(response);
 }
 
 module.exports = {
@@ -110,4 +119,5 @@ module.exports = {
     createSquad,
     updateSquad,
     deleteSquad,
+    getDashSquad
 };

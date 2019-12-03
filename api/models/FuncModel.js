@@ -85,10 +85,12 @@ class FuncModel {
         const sql = `
         INSERT
             INTO tblFuncionario
-                (identificador, nomeFuncionario, sexo, fkSquad, fkCargo, fkMaquina, fkConta)
+                (identificador, nomeFuncionario, sexo, fkSquad, fkCargo, fkMaquina, fkConta, inicioExpediente)
         VALUES
-            ('${identificador}', '${nome}', '${sexo}', '${Number(squad) || "null"}', '${cargo}', '${Number(maquina) || "null"}', ${conta})
+            ('${identificador}', '${nome}', '${sexo}', ${Number(squad) || 'NULL'}, '${cargo}', ${Number(maquina) || 'NULL'}, ${conta}, '08:30:00')
         `;
+
+        console.log(sql);
 
         await query(connection, sql);
     }

@@ -8,6 +8,11 @@ const routes = express.Router();
 
 const SquadController = require('./controllers/SquadController');
 
+//retorna dados gráfico
+routes.post('/dashSquad',  async (req, res) => {
+    const response = await SquadController.getDashSquad(req, res);
+    return response;
+});
 // Retorna a lista de Squads
 routes.get('/squad',  async (req, res) => {
     const response = await SquadController.list(req, res);
@@ -81,11 +86,13 @@ routes.put('/funcionarios', async (req, res) => {
     const response = await FuncController.updateFunc(req, res);
     return response;
 });
-
+// Deletar Funcionários
 routes.delete('/funcionarios', async (req, res) => {
     const response = await FuncController.deleteFunc(req, res);
     return response;
 })
+
+
 
 
 // Dashboard
@@ -100,6 +107,15 @@ routes.get('/dashboard', async(req, res) => {
 
 routes.get('/notifications', async(req, res) => {
     const response = await FuncController.getNotifications(req, res);
+    return response;
+});
+
+// rota notificações home
+
+const HomeController = require('./controllers/HomeController');
+
+routes.post('/notifySquads', async(req, res) => {
+    const response = await HomeController.getNotify(req, res);
     return response;
 });
 

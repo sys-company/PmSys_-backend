@@ -102,6 +102,16 @@ const deleteSquad = async ( req, res ) => {
         return res.status(400).end();
     
     }
+
+
+}
+
+const getDashSquad = async (req, res) => {
+    const { id } = req.query;
+    model = new SquadModel();
+    const dashData = await model.selectData(id);
+    const response = {dashData};
+    return res.status(200).json(response);
 }
 
 module.exports = {
@@ -110,4 +120,5 @@ module.exports = {
     createSquad,
     updateSquad,
     deleteSquad,
+    getDashSquad
 };

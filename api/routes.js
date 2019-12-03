@@ -8,6 +8,11 @@ const routes = express.Router();
 
 const SquadController = require('./controllers/SquadController');
 
+//retorna dados gráfico
+routes.post('/dashSquad',  async (req, res) => {
+    const response = await SquadController.getDashSquad(req, res);
+    return response;
+});
 // Retorna a lista de Squads
 routes.get('/squad',  async (req, res) => {
     const response = await SquadController.list(req, res);
@@ -86,6 +91,8 @@ routes.delete('/funcionarios', async (req, res) => {
     const response = await FuncController.deleteFunc(req, res);
     return response;
 })
+
+
 
 
 // Dashboard

@@ -145,6 +145,22 @@ class SquadModel {
             await query(connection, sql);
         }
 
+        async selectData(id){
+            const sql = `
+            SELECT
+	        AVG(RAMZ.PERCENT_RAM) AS PERCENT_SQUAD
+        FROM (
+		SELECT
+		   ROUND((R.totalRamUsado / R.totalRam)* 100, 2) AS PERCENT_RAM
+		   FROM tblInfoRAM AS R 
+		  INNER JOIN tblMaquina AS M ON (R.fkMaquina = M.idMaquina)
+		 INNER JOIN tblFuncionario AS F ON (M.idMaquina = F.fkMaquina)
+		INNER JOIN tblSquad AS S ON (F.fkSquad = S.idSquad) WHERE S.idSquad = ${id})RAMZ;
+            `;
+            let response = await query(connection, sql);
+            return response.recordsets[0];
+            }
+
 }
 
 module.exports = SquadModel;

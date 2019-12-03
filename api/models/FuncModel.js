@@ -16,6 +16,7 @@ class FuncModel {
                 F.sexo as sexo,
                 F.inicioExpediente as entrada,
                 C.nomeCargo as cargo,
+                C.idCargo as idCargo,
                 S.apelidoSquad as squad,
                 F.fkMaquina as idMaquina,
                 F.fkSquad as idSquad,

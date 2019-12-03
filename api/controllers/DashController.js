@@ -8,7 +8,8 @@ const getData = async (req, res) => {
 
     const notificacoes = await model.notificacoes(periodo);
     const programas = await model.select(periodo);
-    const hardware = await model.selectHard(periodo);
+    const hardware = await model.hardSquad(periodo);
+    // const hardware = await model.selectHard(periodo);
     const response = { notificacoes, programas, hardware };
     return res.status(200).json(response);
 

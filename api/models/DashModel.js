@@ -70,19 +70,46 @@ class DashModel {
 			return formated;
 	}
 
-	async selectHard(periodo) {
+	async hardSquad(periodo) {
 		const sql = `
-			SELECT 
-				*
-			FROM vwHard WHERE PERIODO LIKE '%${periodo}%';
-		`;
+		SELECT
+			AVG(CPU.totalUso) as CPU,
+			(AVG(RAM.totalRamUsado)/AVG(RAM.totalRam))*100 RAM,
+			(AVG(HD.espacoTotal - HD.espacoTotalDisponivel)/AVG(HD.espacoTotal))*100 HD,
+			S.apelidoSquad
+		FROM tblInfoCPU as CPU
+		INNER JOIN tblInfoRAM RAM
+			ON RAM.fkMaquina = CPU.fkMaquina AND SUBSTRING(Convert(varchar(17),CPU.dataCapturada,120), 0, 17) = SUBSTRING(Convert(varchar(17),RAM.dataCapturada,120), 0, 17)
+		INNER JOIN tblInfoHD HD
+			ON HD.fkMaquina = CPU.fkMaquina AND SUBSTRING(Convert(varchar(17),CPU.dataCapturada,120), 0, 17) = SUBSTRING(Convert(varchar(17),HD.dataCapturada,120), 0, 17)
+		INNER JOIN tblFuncionario f
+			ON f.fkMaquina = CPU.fkMaquina
+		INNER JOIN tblSquad S
+			ON S.idSquad = f.fkSquad
+		WHERE 
+			CPU.dataCapturada
+			BETWEEN GETDATE()${periodo=='MENSAL'? '-30':periodo=='SEMANAL'? '-7':'-1'} AND GETDATE()
+		GROUP BY S.idSquad, S.apelidoSquad
+		;`;
+
 		let dashHard = await query(connection, sql);
 		dashHard = dashHard.recordsets[0];
-		
 
 		return dashHard;
-
 	}
+
+	// async hardSquad(periodo) {
+	// 	const sql = `
+	// 		SELECT 
+	// 			*
+	// 		FROM vwHard WHERE PERIODO LIKE '%${periodo}%';
+	// 	`;
+	// 	let dashHard = await query(connection, sql);
+	// 	dashHard = dashHard.recordsets[0];
+
+	// 	return dashHard;
+
+	// }
 
 
 }

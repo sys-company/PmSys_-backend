@@ -10,7 +10,6 @@ const getData = async (req, res) => {
     const programas = await model.select(periodo);
     const hardware = await model.hardSquad(periodo);
     const online = await model.selectOnline(periodo);
-    // const hardware = await model.selectHard(periodo);
     const response = { notificacoes, programas, hardware, online };
     return res.status(200).json(response);
 

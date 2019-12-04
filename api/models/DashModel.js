@@ -15,9 +15,9 @@ class DashModel {
 				S.apelidoSquad squad,
 				NT.nomeTipoNotificacao tipo
 			FROM tblNotificacao N
-			LEFT JOIN tblFuncionario F
+			RIGHT JOIN tblFuncionario F
 				ON F.idFuncionario = N.fkFuncionario
-			LEFT JOIN tblSquad S
+			RIGHT JOIN tblSquad S
 				ON S.idSquad = N.fkSquad
 			INNER JOIN tblTipoNotificacao NT
 				ON NT.idTipoNotificacao = N.fkTipoNotificacao
@@ -33,40 +33,45 @@ class DashModel {
 	
 	async select(periodo) {
 		const sql = `
-			SELECT * FROM dashFinalizadoRadical WHERE PERIODO LIKE '%${periodo}%';
-            `;
+			SELECT
+				DISTINCT 
+				D.nome AS squad,
+				D.nome_programa AS programa,
+				D.t_uso AS uso,
+				D.total_uso AS total
+			FROM dashFinalizadoRadical D
+			WHERE PERIODO LIKE '%${periodo}%'
+		`;
 
 			let dashProgramas = await query(connection, sql);
 			dashProgramas = dashProgramas.recordsets[0];
-			let squads = dashProgramas.map(dashHard => dashHard.nome);
+			let squads = dashProgramas.map(dashHard => dashHard.squad);
 			squads = squads.filter((squad, index) => squads.indexOf(squad) == index);
 			if (!squads.length) return {};
 			let formated = {
-				squads: [],
-				programas: [],
-				aparicoes: [],
+				squad: [],
+				programa: [],
+				tempoUso: [],
 				totalUso: [],
-				tempoUso: [], 
+				porcentagem: [], 
 			};
 			squads.map((squad) => {
-				const dadosSquad = dashProgramas.filter(dado => dado.nome === squad);
+				const dadosSquad = dashProgramas.filter(dado => dado.squad === squad);
 				let programas = dadosSquad.map(dado => dado.nome_programa);
-				programas = programas.filter((programa, index) => programas.indexOf(programa) == index);
 	
-				let maisUsado = {nome: null, aparicoes: 0};
-				programas.forEach(programa => {
-					let count = 0;
-					dadosSquad.forEach(dado => dado.nome_programa === programa && count++);
-					if (count > maisUsado.aparicoes) maisUsado = {nome: programa, aparicoes: count};
+				let maisUsado = {nome: null, uso: 0};
+				dadosSquad.forEach(dado => {
+					if (dado.uso > maisUsado.uso) maisUsado = {nome: dado.programa, uso: dado.uso};
 				})
 	
-				formated.squads.push(squad);
-				formated.programas.push(maisUsado.nome);
-				formated.aparicoes.push(maisUsado.aparicoes);
-				formated.totalUso.push(dadosSquad.map(dado => dado.total_uso)[0]);
-				formated.tempoUso.push(dadosSquad.map(dado => dado.t_uso)[0]);
+				formated.squad.push(squad);
+				formated.programa.push(maisUsado.nome);
+				formated.tempoUso.push(maisUsado.uso);
+				formated.totalUso.push(dadosSquad[0].total);
+				formated.porcentagem.push((maisUsado.uso/dadosSquad[0].total)*100);
 			})
 	
+			// return dashProgramas;
 			return formated;
 	}
 

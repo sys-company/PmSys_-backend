@@ -9,7 +9,7 @@ const routes = express.Router();
 const SquadController = require('./controllers/SquadController');
 
 //retorna dados gráfico
-routes.post('/dashSquad',  async (req, res) => {
+routes.get('/dashSquad',  async (req, res) => {
     const response = await SquadController.getDashSquad(req, res);
     return response;
 });

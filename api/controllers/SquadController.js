@@ -1,5 +1,6 @@
 const SquadModel = require('../models/SquadModel');
 const FuncModel = require('../models/FuncModel');
+const DashModel = require('../models/DashModel');
 
 
 const list = async (req, res) => {
@@ -122,10 +123,11 @@ const deleteSquad = async (req, res) => {
 }
 
 const getDashSquad = async (req, res) => {
-    const { id } = req.query;
-    model = new SquadModel();
-    const dashData = await model.selectData(id);
-    const response = { dashData };
+    const { squad } = req.query;
+    model = new DashModel();
+    let hardware = await model.hardSquad("SEMANAL");
+    hardware = hardware.filter(dado => dado.apelidoSquad === squad)
+    const response = { hardware };
     return res.status(200).json(response);
 }
 

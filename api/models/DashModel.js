@@ -112,9 +112,14 @@ class DashModel {
 	// }
 	async selectOnline(periodo) {
 		const sql = `
-		SELECT
-		 *
-		 FROM vmOnline WHERE PERIODO LIKE '%${periodo}%';
+		SELECT COUNT(RAM.idInfoRAM) cont,
+			s.apelidoSquad,
+			Convert(varchar(11),RAM.dataCapturada,103) as dataCapturada
+		FROM tblInfoRAM RAM
+		INNER JOIN tblFuncionario f on f.fkMaquina = RAM.fkMaquina
+		INNER JOIN tblSquad s on f.fkSquad = s.idSquad
+		WHERE ram.dataCapturada between GETDATE()${periodo=='MENSAL'? '-30':periodo=='SEMANAL'? '-7':'-1'} and GETDATE()
+		GROUP by Convert(varchar(11),RAM.dataCapturada,103), s.apelidoSquad
 		`;
 		let dashOnline = await query(connection, sql);
 		dashOnline = dashOnline.recordsets[0];

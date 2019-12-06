@@ -8,12 +8,20 @@ class HomeModel {
 
     async selectNotificacoes() {
 		const sql = `
-		SELECT TOP 10 NOTIFICS.observacao,SQUADS.apelidoSquad,NOTIFICS.dataCapturada FROM tblNotificacao NOTIFICS
-	    INNER JOIN tblSquad SQUADS ON(NOTIFICS.fkSquad = SQUADS.idSquad) ORDER BY dataCapturada DESC;
+		SELECT TOP 10
+			N.observacao, S.apelidoSquad, N.dataCapturada, F.nomeFuncionario, NT.nomeTipoNotificacao
+		FROM tblNotificacao N
+		INNER JOIN tblSquad S
+			ON(N.fkSquad = S.idSquad)
+		LEFT JOIN tblFuncionario F
+			ON(N.fkFuncionario = F.idFuncionario)
+		INNER JOIN tblTipoNotificacao NT
+			ON(N.fkTipoNotificacao = NT.idTipoNotificacao)
+		ORDER BY dataCapturada DESC;
 		`;
 		let lastNotify = await query(connection, sql);
 		lastNotify = lastNotify.recordsets[0];
-		
+
 
 		return lastNotify;
 

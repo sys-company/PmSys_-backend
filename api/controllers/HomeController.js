@@ -5,8 +5,7 @@ const getNotify = async (req, res) => {
 
     model = new HomeModel();
 
-    const notify = await model.selectNotificacoes();
-    const response = {notify};
+    const response = await model.selectNotificacoes();
     return res.status(200).json(response);
 
 }

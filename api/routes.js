@@ -114,7 +114,7 @@ routes.get('/notifications', async(req, res) => {
 
 const HomeController = require('./controllers/HomeController');
 
-routes.post('/notifySquads', async(req, res) => {
+routes.get('/notificacao', async(req, res) => {
     const response = await HomeController.getNotify(req, res);
     return response;
 });

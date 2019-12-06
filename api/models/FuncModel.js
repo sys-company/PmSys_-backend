@@ -18,6 +18,7 @@ class FuncModel {
                 C.nomeCargo as cargo,
                 C.idCargo as idCargo,
                 S.apelidoSquad as squad,
+		        M.apelidoMaquina AS apelidoMaquina,
                 F.fkMaquina as idMaquina,
                 F.fkSquad as idSquad,
 				CASE WHEN sf.horaSaiu is null then 1 else 0 end as [Online],
@@ -29,6 +30,8 @@ class FuncModel {
                 ON F.fkSquad = S.idSquad
 			LEFT JOIN tblStatusFuncionario sf 
 				ON F.idFuncionario = sf.fkFuncionario
+			LEFT JOIN tblMaquina M
+				ON F.fkMaquina = M.idMaquina
 		) AS J
 		WHERE J.[rank] = 1
         `;
@@ -88,29 +91,55 @@ class FuncModel {
 
     }
 
-    async createFunc(nome, identificador, maquina, cargo, squad, sexo, conta){
+    async createFunc(nome, identificador, maquina, cargo, squad, sexo){
 
         const sql = `
         INSERT
             INTO tblFuncionario
-                (identificador, nomeFuncionario, sexo, fkSquad, fkCargo, fkMaquina, fkConta, inicioExpediente)
+                (identificador, nomeFuncionario, sexo, fkSquad, fkCargo, fkMaquina, inicioExpediente)
         VALUES
-            ('${identificador}', '${nome}', '${sexo}', ${Number(squad) || 'NULL'}, '${cargo}', ${Number(maquina) || 'NULL'}, ${conta}, '08:30:00')
+            ('${identificador}', '${nome}', '${sexo}', ${squad || 'NULL'}, '${cargo}', ${maquina || 'NULL'}, '08:30:00')
         `;
-
-        console.log(sql);
 
         await query(connection, sql);
     }
 
-    async updateFunc(nome, identificador, maquina, cargo, squad, sexo, conta, id){
+    async getMaquina(apelidoMaquina){
+        const sql = `
+        SELECT 
+        TOP 1
+        idMaquina 
+        FROM 
+        tblMaquina
+        WHERE
+        apelidoMaquina = '${apelidoMaquina}'
+        `;
+
+        let response = await query(connection, sql);
+        return response.recordsets[0][0].idMaquina;
+
+    }
+
+    async setMaquina(apelidoMaquina){
+        const sql = `
+        INSERT 
+            INTO tblMaquina
+                (apelidoMaquina)
+        VALUES('${apelidoMaquina}')
+        `;
+
+        await query(connection, sql);
+
+    }
+
+    async updateFunc(nome, identificador, cargo, squad, sexo, id){
 
         const sql =`
         UPDATE
             tblFuncionario
         SET
             identificador = '${identificador}', nomeFuncionario = '${nome}', sexo = '${sexo}',
-            fkSquad = ${Number(squad) || 'null'}, fkCargo = ${cargo}, fkMaquina = ${Number(maquina) || 'null'}, fkConta = ${conta}
+            fkSquad = ${squad || 'NULL'}, fkCargo = ${cargo}
         WHERE idFuncionario = ${id}
 
         `;

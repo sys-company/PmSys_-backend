@@ -52,13 +52,13 @@ const getSessions = async (req, res) => {
 } 
 
 const createFunc = async (req, res) => {
-    const conta = req.headers.id;
     const { nome, identificador, maquina, cargo, squad, sexo } = req.body;
     model = new FuncModel();
 
     if(nome && identificador && cargo && sexo){
-
-        await model.createFunc(nome, identificador, maquina, cargo, squad, sexo, conta);
+        await model.setMaquina(maquina);
+        const fkMaquina = await model.getMaquina(maquina);
+        await model.createFunc(nome, identificador, fkMaquina, cargo, squad, sexo);
         return res.status(201).end();
 
     } else {
@@ -70,13 +70,11 @@ const createFunc = async (req, res) => {
 
 const updateFunc = async (req, res) => {
     const { id } = req.query;
-    const conta = req.headers.id;
-    const { nome, identificador, maquina, cargo, squad, sexo } = req.body;
+    const { nome, identificador, cargo, squad, sexo } = req.body;
     model = new FuncModel();
 
     if(nome && identificador && cargo && sexo){
-
-        await model.updateFunc(nome, identificador, maquina, cargo, squad, sexo, conta, id);
+        await model.updateFunc(nome, identificador, cargo, squad, sexo, id);
         return res.status(201).end();
 
     } else {
